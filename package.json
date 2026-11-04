@@ -1,0 +1,19 @@
+{
+  "name": "wds-food-delivery-lenhuthuc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Storià Food - Fine Dining & Food Delivery Monorepo (Next.js 16 + Tailwind CSS + shadcn/ui + Zustand + React Hook Form + Zod)",
+  "scripts": {
+    "dev": "pnpm --filter web dev",
+    "dev:all": "pnpm -r --parallel dev",
+    "build": "pnpm --filter web build",
+    "start": "pnpm --filter web start",
+    "lint": "pnpm --filter web lint",
+    "check:ac": "node scripts/check-ac.mjs"
+  },
+  "packageManager": "pnpm@11.6.0",
+  "engines": {
+    "node": ">=20.0.0",
+    "pnpm": ">=9.0.0"
+  }
+}
