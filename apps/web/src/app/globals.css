@@ -1,0 +1,75 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+:root {
+  --background: #12100e;
+  --foreground: #faf7f2;
+  --card: #1c1814;
+  --card-foreground: #faf7f2;
+  --popover: #1c1814;
+  --popover-foreground: #faf7f2;
+  --primary: #eab308;
+  --primary-foreground: #12100e;
+  --secondary: #27221c;
+  --secondary-foreground: #f3ede2;
+  --muted: #241f1a;
+  --muted-foreground: #a89f91;
+  --accent: #eab308;
+  --accent-foreground: #12100e;
+  --destructive: #ef4444;
+  --destructive-foreground: #faf7f2;
+  --border: #332c24;
+  --input: #2b251e;
+  --ring: #eab308;
+  --radius: 0.875rem;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --font-serif: var(--font-playfair), Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-sans: var(--font-jakarta), system-ui, -apple-system, sans-serif;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html,
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  scroll-behavior: smooth;
+}
+
+.font-serif-display {
+  font-family: var(--font-serif);
+}
+
+/* Custom subtle gold glow utility */
+.gold-glow {
+  box-shadow: 0 10px 35px -10px rgba(234, 179, 8, 0.25);
+}
+
+.gold-border-gradient {
+  background: linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(51, 44, 36, 0.4));
+}
