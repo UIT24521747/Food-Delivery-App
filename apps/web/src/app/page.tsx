@@ -249,7 +249,7 @@ export default function HomePage() {
       </section>
 
       {/* SECTION 3: EXPERIENCES (From UI Kit "Experiences: Jazz & Cocktails, Wine Tasting") */}
-      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section id="experiences" className="mx-auto max-w-7xl scroll-mt-24 px-4 sm:px-6 lg:px-8">
         <div className="rounded-3xl border border-border/80 bg-[#181410] p-6 sm:p-10">
           <div className="mb-6 flex flex-col justify-between gap-2 sm:flex-row sm:items-end">
             <div>

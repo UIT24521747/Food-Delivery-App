@@ -16,11 +16,10 @@ import { useCartStore, selectTotalItems } from "@/store/useCartStore";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { href: "/", label: "Trang chủ" },
-  { href: "/#restaurants", label: "Nhà hàng" },
-  { href: "/#signature-dishes", label: "Món đặc trưng" },
-  { href: "/checkout", label: "Thanh toán" },
-  { href: "/profile", label: "Hồ sơ" },
+  { href: "/", label: "Khám phá" },
+  { href: "/#restaurants", label: "Nhà hàng 5 sao" },
+  { href: "/#signature-dishes", label: "Signature Dishes" },
+  { href: "/#experiences", label: "Trải nghiệm & Sự kiện" },
 ];
 
 export function Header() {
@@ -68,22 +67,19 @@ export function Header() {
           </Link>
         </div>
 
-        {/* Center: Desktop Navigation */}
-        <nav className="hidden items-center gap-1 md:flex">
+        {/* Center: Desktop Navigation (Cleared & focused on discoverability) */}
+        <nav className="hidden items-center gap-1.5 md:flex">
           {NAV_LINKS.map((link) => {
-            const isActive =
-              link.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(link.href);
+            const isActive = link.href === "/" && pathname === "/";
             return (
               <Link
                 key={link.href}
                 href={link.href}
                 className={cn(
-                  "rounded-xl px-4 py-2 text-sm font-medium transition-colors",
+                  "rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200",
                   isActive
                     ? "bg-primary/15 text-primary font-semibold"
-                    : "text-muted-foreground hover:bg-secondary/70 hover:text-foreground"
+                    : "text-muted-foreground hover:bg-secondary/70 hover:text-primary"
                 )}
               >
                 {link.label}
@@ -116,6 +112,7 @@ export function Header() {
           <Link
             href="/profile"
             aria-label="Hồ sơ cá nhân"
+            title="Hồ sơ thực khách"
             className="flex size-10 items-center justify-center rounded-xl border border-border bg-secondary/60 text-foreground/80 transition-colors hover:border-primary/50 hover:text-primary"
           >
             <UserCircle2 className="size-5" />
