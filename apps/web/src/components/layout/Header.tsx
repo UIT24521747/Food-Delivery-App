@@ -4,25 +4,22 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  Utensils,
   ShoppingBag,
-  UserCircle2,
+  User,
   Menu,
   X,
-  Sparkles,
+  ChevronLeft,
   Home,
   Compass,
-  ChevronLeft,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
 import { useCartStore, selectTotalItems } from "@/store/useCartStore";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
-  { href: "/", label: "Khám phá" },
-  { href: "/#restaurants", label: "Nhà hàng 5 sao" },
-  { href: "/#signature-dishes", label: "Signature Dishes" },
-  { href: "/#experiences", label: "Trải nghiệm & Sự kiện" },
+  { href: "/", label: "La Maison" },
+  { href: "/#restaurants", label: "Les Tables" },
+  { href: "/#signature-dishes", label: "La Carte" },
+  { href: "/#experiences", label: "Soirées" },
 ];
 
 export function Header() {
@@ -37,24 +34,24 @@ export function Header() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full border-b border-border/80 bg-[#12100e]/95 backdrop-blur-md">
-        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-3 sm:h-20 sm:px-6 lg:px-8">
-          {/* Left: Mobile Back/Menu Button + Brand Logo */}
-          <div className="flex items-center gap-2 sm:gap-3">
+      <header className="sticky top-0 z-50 w-full border-b border-primary/20 bg-[#0c0b09]/95 backdrop-blur-md">
+        <div className="mx-auto flex h-14 max-w-7xl items-center justify-between px-4 sm:h-20 sm:px-8">
+          {/* Left: Mobile Back/Menu Trigger + Brand Logotype */}
+          <div className="flex items-center gap-3">
             {isSubPage ? (
               <Link
                 href="/"
                 aria-label="Quay về trang chủ"
-                className="inline-flex size-9 items-center justify-center rounded-xl border border-primary/40 bg-primary/15 text-primary transition-colors hover:bg-primary hover:text-primary-foreground md:hidden"
+                className="inline-flex size-8 items-center justify-center border border-primary/35 text-primary transition-colors hover:bg-primary hover:text-primary-foreground md:hidden"
               >
-                <ChevronLeft className="size-5" />
+                <ChevronLeft className="size-4" />
               </Link>
             ) : (
               <button
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 aria-label="Mở menu điều hướng"
-                className="inline-flex size-9 items-center justify-center rounded-xl border border-border bg-secondary/70 text-foreground transition-colors hover:border-primary/50 hover:text-primary md:hidden cursor-pointer"
+                className="inline-flex size-8 items-center justify-center border border-primary/30 text-foreground/80 transition-colors hover:border-primary hover:text-primary md:hidden cursor-pointer"
               >
                 {mobileMenuOpen ? (
                   <X className="size-4" />
@@ -64,26 +61,18 @@ export function Header() {
               </button>
             )}
 
-            <Link
-              href="/"
-              className="group flex items-center gap-2 focus:outline-none sm:gap-2.5"
-            >
-              <div className="flex size-9 items-center justify-center rounded-xl border border-primary/40 bg-primary/15 text-primary transition-transform group-hover:scale-105 sm:size-10">
-                <Utensils className="size-4 sm:size-5" />
-              </div>
-              <div className="flex flex-col">
-                <span className="font-serif-display text-base font-bold tracking-wide text-primary sm:text-xl">
-                  Storià Food
-                </span>
-                <span className="hidden text-[10px] uppercase tracking-[0.2em] text-muted-foreground sm:block">
-                  Fine Dining Resto
-                </span>
-              </div>
+            <Link href="/" className="group flex flex-col focus:outline-none">
+              <span className="font-serif-display text-lg font-medium tracking-[0.22em] uppercase text-foreground transition-colors group-hover:text-primary sm:text-2xl">
+                Maison Storià
+              </span>
+              <span className="hidden text-[9px] uppercase tracking-[0.35em] text-primary/80 sm:block">
+                Haute Gastronomie
+              </span>
             </Link>
           </div>
 
-          {/* Center: Desktop Navigation */}
-          <nav className="hidden items-center gap-1.5 md:flex">
+          {/* Center: Classical Minimalist Navigation */}
+          <nav className="hidden items-center gap-8 md:flex">
             {NAV_LINKS.map((link) => {
               const isActive = link.href === "/" && pathname === "/";
               return (
@@ -91,10 +80,10 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "rounded-xl px-4 py-2 text-sm font-medium transition-all duration-200",
+                    "relative py-1 text-[11px] uppercase tracking-[0.24em] transition-colors duration-300",
                     isActive
-                      ? "bg-primary/15 text-primary font-semibold"
-                      : "text-muted-foreground hover:bg-secondary/70 hover:text-primary"
+                      ? "text-primary"
+                      : "text-muted-foreground hover:text-foreground"
                   )}
                 >
                   {link.label}
@@ -103,52 +92,44 @@ export function Header() {
             })}
           </nav>
 
-          {/* Right: Actions (Cart Drawer Trigger & Profile) */}
-          <div className="flex items-center gap-2">
-            <Button
+          {/* Right: Discreet Cart & Member Actions */}
+          <div className="flex items-center gap-3">
+            <button
               type="button"
-              variant="outline"
               onClick={() => setDrawerOpen(true)}
               data-testid="header-cart-button"
-              className="relative h-9 gap-1.5 rounded-xl border-primary/40 bg-secondary/70 px-2.5 text-foreground hover:border-primary hover:bg-primary/15 hover:text-primary sm:h-10 sm:gap-2 sm:px-3.5"
+              className="group inline-flex h-9 items-center gap-2.5 border border-primary/40 bg-transparent px-3.5 text-[10px] uppercase tracking-[0.2em] text-foreground transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground cursor-pointer sm:h-10 sm:px-5"
             >
-              <ShoppingBag className="size-4 text-primary" />
-              <span className="hidden text-xs font-semibold sm:inline">
-                Giỏ hàng
-              </span>
+              <ShoppingBag className="size-3.5 text-primary transition-colors group-hover:text-primary-foreground" />
+              <span className="hidden sm:inline">Giỏ hàng</span>
               <span
                 data-testid="header-cart-badge"
-                className="flex min-w-[18px] items-center justify-center rounded-full bg-primary px-1.5 py-0.5 text-[10px] font-extrabold text-primary-foreground sm:min-w-[20px] sm:text-[11px]"
+                className="font-serif-display text-xs font-semibold text-primary transition-colors group-hover:text-primary-foreground"
               >
-                {badgeCount}
+                ({badgeCount})
               </span>
-            </Button>
+            </button>
 
             <Link
               href="/profile"
               aria-label="Hồ sơ cá nhân"
-              title="Hồ sơ thực khách"
-              className="flex size-9 items-center justify-center rounded-xl border border-border bg-secondary/60 text-foreground/80 transition-colors hover:border-primary/50 hover:text-primary sm:size-10"
+              className="flex size-9 items-center justify-center border border-primary/30 text-foreground/80 transition-colors hover:border-primary hover:text-primary sm:size-10"
             >
-              <UserCircle2 className="size-4 sm:size-5" />
+              <User className="size-4" />
             </Link>
           </div>
         </div>
 
-        {/* Mobile Navigation Dropdown */}
+        {/* Mobile Dropdown */}
         {mobileMenuOpen && (
-          <div className="border-t border-border/80 bg-[#181512] px-4 py-3 md:hidden">
-            <div className="mb-2.5 flex items-center gap-2 rounded-xl border border-primary/20 bg-primary/10 px-3 py-2 text-xs text-primary">
-              <Sparkles className="size-4 shrink-0" />
-              <span>Good Evening, Alex! Taste The Extraordinary Tonight.</span>
-            </div>
-            <nav className="grid grid-cols-2 gap-1.5">
+          <div className="border-t border-primary/20 bg-[#0c0b09] px-4 py-4 md:hidden">
+            <nav className="grid grid-cols-2 gap-2">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
-                  className="rounded-xl border border-border/60 bg-secondary/40 px-3 py-2 text-xs font-medium text-foreground/90 transition-colors hover:border-primary/40 hover:text-primary"
+                  className="border border-primary/20 px-3 py-2.5 text-center text-[10px] uppercase tracking-[0.22em] text-foreground/90 transition-colors hover:border-primary hover:text-primary"
                 >
                   {link.label}
                 </Link>
@@ -158,59 +139,59 @@ export function Header() {
         )}
       </header>
 
-      {/* Fixed Bottom Navigation Bar on Mobile (Matching Storià Food UI Kit + instant fallback) */}
+      {/* Fixed Mobile Bottom Bar */}
       <nav
-        aria-label="Thanh điều hướng cố định dưới cùng trên Mobile"
-        className="fixed inset-x-0 bottom-0 z-50 border-t border-border/90 bg-[#12100e]/95 px-2 py-1.5 backdrop-blur-md md:hidden"
+        aria-label="Điều hướng di động"
+        className="fixed inset-x-0 bottom-0 z-50 border-t border-primary/25 bg-[#0c0b09]/95 backdrop-blur-md md:hidden"
       >
-        <div className="mx-auto grid max-w-md grid-cols-4 items-center gap-1">
+        <div className="mx-auto grid max-w-md grid-cols-4 divide-x divide-primary/15">
           <Link
             href="/"
             className={cn(
-              "flex flex-col items-center justify-center gap-0.5 rounded-xl py-1 text-[10px] font-semibold transition-colors",
+              "flex flex-col items-center justify-center gap-1 py-2.5 text-[9px] uppercase tracking-[0.18em] transition-colors",
               pathname === "/"
                 ? "text-primary"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <Home className="size-4" />
-            <span>Trang chủ</span>
+            <Home className="size-3.5" />
+            <span>Maison</span>
           </Link>
 
           <Link
             href="/#restaurants"
-            className="flex flex-col items-center justify-center gap-0.5 rounded-xl py-1 text-[10px] font-semibold text-muted-foreground transition-colors hover:text-primary"
+            className="flex flex-col items-center justify-center gap-1 py-2.5 text-[9px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-primary"
           >
-            <Compass className="size-4" />
-            <span>Nhà hàng</span>
+            <Compass className="size-3.5" />
+            <span>Tables</span>
           </Link>
 
           <button
             type="button"
             onClick={() => setDrawerOpen(true)}
-            className="relative flex flex-col items-center justify-center gap-0.5 rounded-xl py-1 text-[10px] font-semibold text-muted-foreground transition-colors hover:text-primary cursor-pointer"
+            className="flex flex-col items-center justify-center gap-1 py-2.5 text-[9px] uppercase tracking-[0.18em] text-muted-foreground transition-colors hover:text-primary cursor-pointer"
           >
             <div className="relative">
-              <ShoppingBag className="size-4 text-primary" />
+              <ShoppingBag className="size-3.5 text-primary" />
               {badgeCount > 0 && (
-                <span className="absolute -top-1.5 -right-2.5 flex min-w-[15px] items-center justify-center rounded-full bg-primary px-1 text-[9px] font-extrabold text-primary-foreground">
+                <span className=" -top-1.5 -right-2.5 absolute flex min-w-[14px] items-center justify-center bg-primary px-1 text-[8px] font-bold text-primary-foreground">
                   {badgeCount}
                 </span>
               )}
             </div>
-            <span>Giỏ hàng</span>
+            <span>Giỏ ({badgeCount})</span>
           </button>
 
           <Link
             href="/profile"
             className={cn(
-              "flex flex-col items-center justify-center gap-0.5 rounded-xl py-1 text-[10px] font-semibold transition-colors",
+              "flex flex-col items-center justify-center gap-1 py-2.5 text-[9px] uppercase tracking-[0.18em] transition-colors",
               pathname.startsWith("/profile")
                 ? "text-primary"
                 : "text-muted-foreground hover:text-foreground"
             )}
           >
-            <UserCircle2 className="size-4" />
+            <User className="size-3.5" />
             <span>Hồ sơ</span>
           </Link>
         </div>

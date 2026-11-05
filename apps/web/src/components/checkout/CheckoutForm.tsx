@@ -6,23 +6,7 @@ import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import {
-  Loader2,
-  CheckCircle2,
-  ShoppingBag,
-  MapPin,
-  Phone,
-  User,
-  FileText,
-  Sparkles,
-  ArrowLeft,
-  ShieldCheck,
-  Plus,
-  Minus,
-  Trash2,
-  Clock,
-  Truck,
-} from "lucide-react";
+import { Loader2, Plus, Minus, Trash2, ArrowLeft } from "lucide-react";
 import {
   checkoutSchema,
   type CheckoutFormValues,
@@ -129,9 +113,7 @@ export function CheckoutForm() {
 
   const onSubmit = async (values: CheckoutFormValues) => {
     if (items.length === 0) {
-      toast.error(
-        "Giỏ hàng của bạn đang trống. Vui lòng chọn ít nhất 1 món ăn trước khi đặt hàng!"
-      );
+      toast.error("Vui lòng chọn món trước khi đặt hàng.");
       return;
     }
 
@@ -157,11 +139,10 @@ export function CheckoutForm() {
       const result = await response.json();
 
       if (!response.ok || !result.success) {
-        toast.error(result.message || "Không thể đặt hàng. Vui lòng thử lại.");
+        toast.error(result.message || "Không thể đặt hàng.");
         return;
       }
 
-      // Lưu trạng thái xác nhận đơn hàng & XÓA SẠCH GIỎ HÀNG
       setConfirmedOrder({
         orderCode: result.orderCode,
         createdAt: result.createdAt,
@@ -175,135 +156,90 @@ export function CheckoutForm() {
 
       clearCart();
       reset();
-      toast.success(`Đặt hàng thành công! Mã đơn: ${result.orderCode}`);
+      toast.success(`Mã đơn: ${result.orderCode}`);
     } catch {
-      toast.error("Có lỗi kết nối tới máy chủ. Vui lòng thử lại.");
+      toast.error("Có lỗi kết nối máy chủ.");
     }
   };
 
-  // MÀN HÌNH XÁC NHẬN ĐƠN HÀNG THÀNH CÔNG
   if (confirmedOrder) {
     return (
       <Card
         data-testid="order-confirmation"
-        className="mx-auto max-w-2xl border-primary/50 bg-[#1c1814] p-6 shadow-2xl gold-glow sm:p-10"
+        className="french-double-border mx-auto max-w-xl bg-[#13110e] p-8 sm:p-12"
       >
-        <div className="flex flex-col items-center text-center">
-          <div className="mb-4 flex size-20 items-center justify-center rounded-full border-2 border-primary bg-primary/15 text-primary shadow-lg">
-            <CheckCircle2 className="size-10" />
-          </div>
-
-          <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1 text-xs font-semibold text-primary">
-            <Sparkles className="size-3.5" />
-            <span>Đặt Bàn Tiệc & Giao Hàng Thành Công</span>
-          </span>
-
-          <h2 className="mt-3 font-serif-display text-3xl font-bold text-foreground sm:text-4xl">
-            Cảm ơn, {confirmedOrder.customer.fullName}!
-          </h2>
-          <p className="mt-2 max-w-md text-sm text-muted-foreground">
-            Đơn hàng Fine Dining của bạn đã được chuyển tới bếp trưởng. Giỏ hàng
-            hiện tại đã được làm mới.
+        <div className="space-y-4 text-center">
+          <p className="text-[10px] uppercase tracking-[0.35em] text-primary">
+            Confirmation de Commande
           </p>
+          <h2 className="font-serif-display text-3xl font-normal text-foreground sm:text-4xl">
+            Merci, {confirmedOrder.customer.fullName}
+          </h2>
 
-          {/* Simulated Order Code */}
-          <div className="mt-6 w-full rounded-2xl border border-primary/40 bg-[#12100e] p-5">
-            <p className="text-xs uppercase tracking-widest text-muted-foreground">
-              Mã Đơn Hàng Giả Lập
+          <div className="my-6 border-y border-primary/20 py-5">
+            <p className="text-[9px] uppercase tracking-[0.3em] text-muted-foreground">
+              Mã Đơn Hàng
             </p>
             <p
               data-testid="order-code"
-              className="mt-1 font-serif-display text-2xl font-extrabold tracking-wider text-primary sm:text-3xl"
+              className="mt-1 font-serif-display text-3xl tracking-widest text-primary"
             >
               {confirmedOrder.orderCode}
             </p>
-            <p className="mt-1 text-xs text-emerald-400">
-              Dự kiến giao tới địa chỉ của bạn trong{" "}
+            <p className="mt-2 font-serif-display text-sm italic text-muted-foreground">
               {confirmedOrder.estimatedDelivery}
             </p>
           </div>
         </div>
 
-        <Separator className="my-6" />
-
-        {/* Thông tin người nhận */}
-        <div className="space-y-4 text-sm">
-          <h3 className="font-serif-display text-base font-bold text-foreground">
-            Thông Tin Giao Hàng
-          </h3>
-          <div className="grid grid-cols-1 gap-3 rounded-2xl border border-border/80 bg-secondary/40 p-4 sm:grid-cols-2">
-            <div>
-              <span className="text-xs text-muted-foreground">Người nhận:</span>
-              <p className="font-semibold text-foreground">
-                {confirmedOrder.customer.fullName}
-              </p>
-            </div>
-            <div>
-              <span className="text-xs text-muted-foreground">
-                Số điện thoại:
-              </span>
-              <p className="font-semibold text-foreground">
-                {confirmedOrder.customer.phone}
-              </p>
-            </div>
-            <div className="sm:col-span-2">
-              <span className="text-xs text-muted-foreground">
-                Địa chỉ nhận món:
-              </span>
-              <p className="font-semibold text-foreground">
-                {confirmedOrder.customer.address}
-              </p>
-            </div>
-            {confirmedOrder.customer.note && (
-              <div className="sm:col-span-2">
-                <span className="text-xs text-muted-foreground">Ghi chú:</span>
-                <p className="italic text-foreground/90">
-                  “{confirmedOrder.customer.note}”
-                </p>
-              </div>
-            )}
+        <div className="space-y-2 text-xs text-muted-foreground">
+          <div className="flex justify-between py-1">
+            <span className="uppercase tracking-widest">Điện thoại</span>
+            <span className="text-foreground">
+              {confirmedOrder.customer.phone}
+            </span>
+          </div>
+          <div className="flex justify-between gap-4 py-1">
+            <span className="shrink-0 uppercase tracking-widest">Địa chỉ</span>
+            <span className="text-right text-foreground">
+              {confirmedOrder.customer.address}
+            </span>
           </div>
         </div>
 
-        {/* Danh sách món đã đặt */}
-        <div className="mt-6 space-y-3">
-          <h3 className="font-serif-display text-base font-bold text-foreground">
-            Chi Tiết Thực Đơn Đã Đặt ({confirmedOrder.orderedItems.length} món)
-          </h3>
-          <div className="space-y-2 rounded-2xl border border-border/80 bg-secondary/30 p-4">
-            {confirmedOrder.orderedItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center justify-between text-sm"
-              >
-                <span className="text-foreground/90">
-                  {item.name}{" "}
-                  <strong className="text-primary">x{item.quantity}</strong>
-                </span>
-                <span className="font-semibold text-foreground">
-                  {formatCurrency(item.price * item.quantity)}
-                </span>
-              </div>
-            ))}
-            <div className="flex items-center justify-between pt-1 text-xs text-muted-foreground">
-              <span>Phí giao hàng theo địa chỉ</span>
-              <span>{formatCurrency(confirmedOrder.deliveryFee)}</span>
-            </div>
-            <Separator className="my-2" />
-            <div className="flex items-center justify-between text-base font-bold">
-              <span>Tổng thanh toán</span>
-              <span className="text-primary">
-                {formatCurrency(confirmedOrder.totalAmount)}
+        <Separator className="my-6 bg-primary/15" />
+
+        <div className="space-y-2.5">
+          {confirmedOrder.orderedItems.map((item) => (
+            <div
+              key={item.id}
+              className="flex items-baseline justify-between font-serif-display text-base"
+            >
+              <span className="text-foreground">
+                {item.name} <span className="text-primary">×{item.quantity}</span>
+              </span>
+              <span className="text-foreground">
+                {formatCurrency(item.price * item.quantity)}
               </span>
             </div>
+          ))}
+          <div className="flex items-baseline justify-between pt-2 text-xs text-muted-foreground">
+            <span className="uppercase tracking-widest">Phí giao hàng</span>
+            <span>{formatCurrency(confirmedOrder.deliveryFee)}</span>
+          </div>
+          <div className="flex items-baseline justify-between border-t border-primary/20 pt-4 font-serif-display text-xl">
+            <span>Tổng cộng</span>
+            <span className="text-primary">
+              {formatCurrency(confirmedOrder.totalAmount)}
+            </span>
           </div>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-          <Button asChild size="lg">
+        <div className="mt-10 text-center">
+          <Button asChild variant="outline" size="lg">
             <Link href="/">
-              <ArrowLeft className="size-4" />
-              <span>Tiếp tục khám phá nhà hàng</span>
+              <ArrowLeft className="size-3.5" />
+              <span>La Maison</span>
             </Link>
           </Button>
         </div>
@@ -312,46 +248,36 @@ export function CheckoutForm() {
   }
 
   return (
-    <div className="grid grid-cols-1 gap-8 lg:grid-cols-12">
-      {/* Left Column: Checkout Form with React Hook Form + Zod */}
+    <div className="grid grid-cols-1 gap-10 lg:grid-cols-12">
+      {/* Left: Minimalist Form */}
       <div className="lg:col-span-7">
-        <Card className="border-border/80 bg-[#1c1814]">
-          <CardHeader className="border-b border-border/70 pb-5">
-            <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-xl bg-primary/15 text-primary">
-                <MapPin className="size-5" />
-              </div>
-              <div>
-                <CardTitle className="text-xl text-foreground">
-                  Thông Tin Giao Hàng Fine Dining
-                </CardTitle>
-                <p className="text-xs text-muted-foreground">
-                  Nhập địa chỉ giao hàng để hệ thống tự động tính phí và thời
-                  gian giao dự kiến
-                </p>
-              </div>
-            </div>
+        <Card className="border-primary/20 bg-[#13110e] p-2 sm:p-4">
+          <CardHeader className="border-b border-primary/15 pb-4">
+            <p className="text-[9px] uppercase tracking-[0.32em] text-primary">
+              Informations
+            </p>
+            <CardTitle className="font-serif-display text-2xl font-normal">
+              Thông Tin Quý Khách
+            </CardTitle>
           </CardHeader>
 
           <CardContent className="pt-6">
             <form
               onSubmit={handleSubmit(onSubmit)}
               noValidate
-              className="space-y-5"
+              className="space-y-6"
               data-testid="checkout-form"
             >
-              {/* Họ và tên */}
-              <div className="space-y-2">
-                <Label htmlFor="fullName" className="flex items-center gap-1.5">
-                  <User className="size-3.5 text-primary" />
-                  <span>
-                    Họ và tên người nhận{" "}
-                    <span className="text-destructive">*</span>
-                  </span>
+              <div className="space-y-1.5">
+                <Label
+                  htmlFor="fullName"
+                  className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground"
+                >
+                  Họ và tên
                 </Label>
                 <Input
                   id="fullName"
-                  placeholder="Ví dụ: Lê Như Thực"
+                  placeholder="Lê Như Thực"
                   aria-invalid={!!errors.fullName}
                   {...register("fullName")}
                 />
@@ -359,26 +285,24 @@ export function CheckoutForm() {
                   <p
                     role="alert"
                     data-testid="error-fullName"
-                    className="text-xs font-medium text-destructive"
+                    className="pt-1 text-xs text-destructive"
                   >
                     {errors.fullName.message}
                   </p>
                 )}
               </div>
 
-              {/* Số điện thoại Việt Nam */}
-              <div className="space-y-2">
-                <Label htmlFor="phone" className="flex items-center gap-1.5">
-                  <Phone className="size-3.5 text-primary" />
-                  <span>
-                    Số điện thoại Việt Nam{" "}
-                    <span className="text-destructive">*</span>
-                  </span>
+              <div className="space-y-1.5">
+                <Label
+                  htmlFor="phone"
+                  className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground"
+                >
+                  Số điện thoại
                 </Label>
                 <Input
                   id="phone"
                   type="tel"
-                  placeholder="Ví dụ: 0901234567"
+                  placeholder="0901234567"
                   aria-invalid={!!errors.phone}
                   {...register("phone")}
                 />
@@ -386,25 +310,23 @@ export function CheckoutForm() {
                   <p
                     role="alert"
                     data-testid="error-phone"
-                    className="text-xs font-medium text-destructive"
+                    className="pt-1 text-xs text-destructive"
                   >
                     {errors.phone.message}
                   </p>
                 )}
               </div>
 
-              {/* Địa chỉ giao hàng */}
-              <div className="space-y-2">
-                <Label htmlFor="address" className="flex items-center gap-1.5">
-                  <MapPin className="size-3.5 text-primary" />
-                  <span>
-                    Địa chỉ giao hàng chi tiết{" "}
-                    <span className="text-destructive">*</span>
-                  </span>
+              <div className="space-y-1.5">
+                <Label
+                  htmlFor="address"
+                  className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground"
+                >
+                  Địa chỉ giao hàng
                 </Label>
                 <Input
                   id="address"
-                  placeholder="Ví dụ: 88 Đồng Khởi, Phường Bến Nghé, Quận 1, TP.HCM"
+                  placeholder="88 Đồng Khởi, Quận 1, TP. Hồ Chí Minh"
                   aria-invalid={!!errors.address}
                   {...register("address")}
                 />
@@ -412,36 +334,23 @@ export function CheckoutForm() {
                   <p
                     role="alert"
                     data-testid="error-address"
-                    className="text-xs font-medium text-destructive"
+                    className="pt-1 text-xs text-destructive"
                   >
                     {errors.address.message}
                   </p>
                 )}
-
-                {hasValidAddress && !errors.address && (
-                  <div className="flex flex-wrap items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-400">
-                    <span className="flex items-center gap-1 font-medium">
-                      <Truck className="size-3.5" />
-                      Phí giao: {formatCurrency(deliveryFee)}
-                    </span>
-                    <span>•</span>
-                    <span className="flex items-center gap-1 font-medium">
-                      <Clock className="size-3.5" />
-                      Dự kiến: {estimatedTime}
-                    </span>
-                  </div>
-                )}
               </div>
 
-              {/* Ghi chú */}
-              <div className="space-y-2">
-                <Label htmlFor="note" className="flex items-center gap-1.5">
-                  <FileText className="size-3.5 text-primary" />
-                  <span>Ghi chú cho bếp trưởng / tài xế (Tùy chọn)</span>
+              <div className="space-y-1.5">
+                <Label
+                  htmlFor="note"
+                  className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground"
+                >
+                  Ghi chú
                 </Label>
                 <Textarea
                   id="note"
-                  placeholder="Ví dụ: Không hành, chuẩn bị thêm dụng cụ ăn bằng gỗ cao cấp, gọi trước khi giao 5 phút..."
+                  placeholder="Yêu cầu riêng cho Bếp trưởng"
                   aria-invalid={!!errors.note}
                   {...register("note")}
                 />
@@ -449,124 +358,115 @@ export function CheckoutForm() {
                   <p
                     role="alert"
                     data-testid="error-note"
-                    className="text-xs font-medium text-destructive"
+                    className="pt-1 text-xs text-destructive"
                   >
                     {errors.note.message}
                   </p>
                 )}
               </div>
 
-              <div className="rounded-2xl border border-primary/25 bg-primary/10 p-4 text-xs text-muted-foreground">
-                <div className="flex items-center gap-2 font-semibold text-primary">
-                  <ShieldCheck className="size-4" />
-                  <span>Cam kết chất lượng Storià Fine Dining</span>
-                </div>
-                <p className="mt-1 leading-relaxed">
-                  Món ăn được niêm phong trong hộp giữ nhiệt chuyên dụng kèm
-                  thiệp hướng dẫn thưởng thức từ Bếp trưởng.
-                </p>
+              <div className="pt-4">
+                <Button
+                  type="submit"
+                  size="lg"
+                  disabled={isSubmitting}
+                  data-testid="submit-order-button"
+                  className="w-full"
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="size-4 animate-spin" />
+                      <span>Đang xử lý...</span>
+                    </>
+                  ) : (
+                    <span>Xác Nhận Đặt Hàng</span>
+                  )}
+                </Button>
               </div>
-
-              <Button
-                type="submit"
-                size="lg"
-                disabled={isSubmitting}
-                data-testid="submit-order-button"
-                className="w-full text-base font-bold"
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="size-5 animate-spin" />
-                    <span>Đang xử lý đơn hàng của bạn...</span>
-                  </>
-                ) : (
-                  <>
-                    <ShoppingBag className="size-5" />
-                    <span>
-                      Xác nhận đặt hàng ({formatCurrency(finalTotal)})
-                    </span>
-                  </>
-                )}
-              </Button>
             </form>
           </CardContent>
         </Card>
       </div>
 
-      {/* Right Column: Order Preview Summary */}
+      {/* Right: Minimalist Order Receipt */}
       <div className="lg:col-span-5">
-        <Card className="sticky top-24 border-border/80 bg-[#1c1814]">
-          <CardHeader className="border-b border-border/70 pb-4">
-            <CardTitle className="flex items-center justify-between text-lg">
-              <span>Tóm Tắt Đơn Hàng</span>
-              <span className="rounded-full bg-primary/15 px-3 py-0.5 text-xs font-bold text-primary">
+        <Card className="sticky top-24 border-primary/20 bg-[#13110e] p-2 sm:p-4">
+          <CardHeader className="border-b border-primary/15 pb-4">
+            <p className="text-[9px] uppercase tracking-[0.32em] text-primary">
+              Votre Table
+            </p>
+            <CardTitle className="flex items-baseline justify-between font-serif-display text-2xl font-normal">
+              <span>Thực Đơn</span>
+              <span className="text-sm italic text-muted-foreground">
                 {totalItems} món
               </span>
             </CardTitle>
           </CardHeader>
 
-          <CardContent className="space-y-4 pt-5">
+          <CardContent className="space-y-5 pt-5">
             {items.length === 0 ? (
-              <div className="py-8 text-center">
-                <p className="text-sm text-muted-foreground">
-                  Giỏ hàng của bạn hiện đang trống.
+              <div className="py-10 text-center">
+                <p className="font-serif-display text-lg italic text-muted-foreground">
+                  Chưa có món ăn được chọn.
                 </p>
                 <Button asChild variant="outline" size="sm" className="mt-4">
-                  <Link href="/">Quay lại chọn món</Link>
+                  <Link href="/">Chọn Món</Link>
                 </Button>
               </div>
             ) : (
               <>
-                <div className="max-h-80 space-y-3 overflow-y-auto pr-1">
+                <div className="max-h-80 divide-y divide-primary/15 overflow-y-auto pr-1">
                   {items.map((item) => (
                     <div
                       key={item.id}
-                      className="flex items-center gap-3 rounded-xl border border-border/70 bg-secondary/40 p-2.5"
+                      className="flex items-center gap-3 py-3 first:pt-0"
                     >
-                      <div className="relative size-14 shrink-0 overflow-hidden rounded-lg">
+                      <div className="relative size-12 shrink-0 overflow-hidden border border-primary/20">
                         <Image
                           src={item.imageUrl}
                           alt={item.name}
                           fill
-                          sizes="56px"
+                          sizes="48px"
                           className="object-cover"
                         />
                       </div>
 
                       <div className="min-w-0 flex-1">
-                        <h4 className="truncate font-serif-display text-sm font-semibold text-foreground">
+                        <h4 className="truncate font-serif-display text-base text-foreground">
                           {item.name}
                         </h4>
-                        <p className="text-xs font-bold text-primary">
+                        <p className="font-serif-display text-xs text-primary">
                           {formatCurrency(item.price * item.quantity)}
                         </p>
                       </div>
 
-                      <div className="flex items-center gap-1">
-                        <button
-                          type="button"
-                          onClick={() => decreaseQuantity(item.id)}
-                          aria-label={`Giảm ${item.name}`}
-                          className="flex size-6 items-center justify-center rounded-md border border-border bg-secondary text-foreground hover:border-primary cursor-pointer"
-                        >
-                          <Minus className="size-3" />
-                        </button>
-                        <span className="w-5 text-center text-xs font-bold">
-                          {item.quantity}
-                        </span>
-                        <button
-                          type="button"
-                          onClick={() => increaseQuantity(item.id)}
-                          aria-label={`Tăng ${item.name}`}
-                          className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground cursor-pointer"
-                        >
-                          <Plus className="size-3" />
-                        </button>
+                      <div className="flex items-center gap-1.5">
+                        <div className="inline-flex items-center border border-primary/30">
+                          <button
+                            type="button"
+                            onClick={() => decreaseQuantity(item.id)}
+                            aria-label={`Giảm ${item.name}`}
+                            className="flex size-6 items-center justify-center text-muted-foreground hover:text-primary cursor-pointer"
+                          >
+                            <Minus className="size-2.5" />
+                          </button>
+                          <span className="w-5 text-center font-serif-display text-xs">
+                            {item.quantity}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => increaseQuantity(item.id)}
+                            aria-label={`Tăng ${item.name}`}
+                            className="flex size-6 items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground cursor-pointer"
+                          >
+                            <Plus className="size-2.5" />
+                          </button>
+                        </div>
                         <button
                           type="button"
                           onClick={() => removeItem(item.id)}
                           aria-label={`Xóa ${item.name}`}
-                          className="ml-1 rounded-md p-1 text-muted-foreground hover:text-destructive cursor-pointer"
+                          className="p-1 text-muted-foreground hover:text-destructive cursor-pointer"
                         >
                           <Trash2 className="size-3.5" />
                         </button>
@@ -575,45 +475,42 @@ export function CheckoutForm() {
                   ))}
                 </div>
 
-                <Separator />
+                <Separator className="bg-primary/15" />
 
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2.5 text-xs">
                   <div className="flex justify-between text-muted-foreground">
-                    <span>Tạm tính ({totalItems} món)</span>
-                    <span className="text-foreground">
+                    <span className="uppercase tracking-[0.2em]">Tạm tính</span>
+                    <span className="font-serif-display text-sm text-foreground">
                       {formatCurrency(totalPrice)}
                     </span>
                   </div>
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>Phí giao hàng</span>
-                    {hasValidAddress ? (
-                      <span className="font-medium text-foreground">
-                        {formatCurrency(deliveryFee)}
-                      </span>
-                    ) : (
-                      <span className="text-xs italic text-muted-foreground">
-                        Nhập địa chỉ để tính phí
-                      </span>
-                    )}
-                  </div>
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>Thời gian giao dự kiến</span>
-                    {hasValidAddress ? (
-                      <span className="font-medium text-emerald-400">
-                        {estimatedTime}
-                      </span>
-                    ) : (
-                      <span className="text-xs italic text-muted-foreground">
-                        Nhập địa chỉ để ước tính
-                      </span>
-                    )}
-                  </div>
-                  <Separator className="my-2" />
-                  <div className="flex items-center justify-between text-base font-bold">
-                    <span className="font-serif-display">
-                      {hasValidAddress ? "Tổng thanh toán" : "Tạm tính"}
+
+                  {hasValidAddress && (
+                    <>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span className="uppercase tracking-[0.2em]">
+                          Phí giao hàng
+                        </span>
+                        <span className="font-serif-display text-sm text-foreground">
+                          {formatCurrency(deliveryFee)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between text-muted-foreground">
+                        <span className="uppercase tracking-[0.2em]">
+                          Thời gian dự kiến
+                        </span>
+                        <span className="font-serif-display text-sm italic text-primary">
+                          {estimatedTime}
+                        </span>
+                      </div>
+                    </>
+                  )}
+
+                  <div className="flex items-baseline justify-between border-t border-primary/20 pt-3">
+                    <span className="text-[10px] uppercase tracking-[0.25em] text-foreground">
+                      Tổng cộng
                     </span>
-                    <span className="text-xl text-primary">
+                    <span className="font-serif-display text-2xl text-primary">
                       {formatCurrency(finalTotal)}
                     </span>
                   </div>

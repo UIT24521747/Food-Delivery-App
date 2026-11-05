@@ -1,7 +1,6 @@
 "use client";
 
-import { Plus, Minus, ShoppingBag } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Plus, Minus } from "lucide-react";
 import { useCartStore } from "@/store/useCartStore";
 import type { MenuItem } from "@/data/restaurants";
 
@@ -14,7 +13,6 @@ interface AddToCartButtonProps {
 export function AddToCartButton({
   item,
   restaurantName,
-  compact = false,
 }: AddToCartButtonProps) {
   const items = useCartStore((state) => state.items);
   const hasHydrated = useCartStore((state) => state.hasHydrated);
@@ -29,62 +27,42 @@ export function AddToCartButton({
 
   if (quantity > 0) {
     return (
-      <div className="inline-flex items-center gap-1 rounded-xl border border-primary/40 bg-secondary/90 p-0.5 sm:gap-1.5 sm:p-1 shadow-sm">
-        <Button
+      <div className="inline-flex items-center border border-primary/50 bg-[#0c0b09]">
+        <button
           type="button"
-          variant="ghost"
-          size="icon"
           onClick={() => decreaseQuantity(item.id)}
           aria-label={`Giảm số lượng ${item.name}`}
-          className="size-6 rounded-lg text-foreground hover:bg-primary/20 hover:text-primary sm:size-7"
+          className="flex size-7 items-center justify-center text-muted-foreground transition-colors hover:text-primary cursor-pointer"
         >
-          <Minus className="size-3 sm:size-3.5" />
-        </Button>
+          <Minus className="size-3" />
+        </button>
         <span
           data-testid={`item-qty-${item.id}`}
-          className="min-w-[1.1rem] text-center text-[11px] font-bold text-primary sm:min-w-[1.5rem] sm:text-xs"
+          className="min-w-[1.5rem] text-center font-serif-display text-xs font-semibold text-primary"
         >
           {quantity}
         </span>
-        <Button
+        <button
           type="button"
-          variant="default"
-          size="icon"
           onClick={() => increaseQuantity(item.id)}
           aria-label={`Tăng số lượng ${item.name}`}
-          className="size-6 rounded-lg sm:size-7"
+          className="flex size-7 items-center justify-center text-primary transition-colors hover:bg-primary hover:text-primary-foreground cursor-pointer"
         >
-          <Plus className="size-3 sm:size-3.5" />
-        </Button>
+          <Plus className="size-3" />
+        </button>
       </div>
     );
   }
 
-  if (compact) {
-    return (
-      <Button
-        type="button"
-        size="icon"
-        onClick={() => addItem(item, restaurantName)}
-        aria-label={`Thêm ${item.name} vào giỏ hàng`}
-        className="size-8 rounded-full border border-primary/50 bg-primary/15 text-primary hover:bg-primary hover:text-primary-foreground shadow-none sm:size-9"
-      >
-        <Plus className="size-4" />
-      </Button>
-    );
-  }
-
   return (
-    <Button
+    <button
       type="button"
-      size="sm"
       onClick={() => addItem(item, restaurantName)}
-      className="h-7 rounded-lg px-2.5 text-[11px] font-semibold sm:h-8 sm:rounded-xl sm:px-3.5 sm:text-xs"
+      aria-label={`Thêm ${item.name}`}
+      className="inline-flex h-7 items-center gap-1.5 border border-primary/45 bg-transparent px-2.5 text-[9px] uppercase tracking-[0.2em] text-primary transition-all duration-300 hover:bg-primary hover:text-primary-foreground cursor-pointer sm:h-8 sm:px-3.5 sm:text-[10px]"
     >
-      <Plus className="size-3.5 sm:hidden" />
-      <ShoppingBag className="hidden size-3.5 sm:inline-block" />
-      <span className="sm:hidden">Thêm</span>
-      <span className="hidden sm:inline">Thêm món</span>
-    </Button>
+      <Plus className="size-3" />
+      <span>Chọn</span>
+    </button>
   );
 }

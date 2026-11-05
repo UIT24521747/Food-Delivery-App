@@ -2,15 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import {
-  ShoppingBag,
-  Plus,
-  Minus,
-  Trash2,
-  ArrowRight,
-  UtensilsCrossed,
-  Sparkles,
-} from "lucide-react";
+import { Plus, Minus, Trash2, ArrowRight } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -43,76 +35,54 @@ export function CartDrawer() {
     <Sheet open={isDrawerOpen} onOpenChange={setDrawerOpen}>
       <SheetContent
         side="right"
-        className="flex w-full flex-col border-l border-border bg-[#161310] p-0 sm:max-w-md"
+        className="flex w-full flex-col rounded-none border-l border-primary/25 bg-[#0c0b09] p-0 sm:max-w-md"
       >
-        <SheetHeader className="border-b border-border/80 bg-[#1c1814] px-6 py-5">
-          <div className="flex items-center gap-3">
-            <div className="flex size-10 items-center justify-center rounded-xl bg-primary/15 text-primary">
-              <ShoppingBag className="size-5" />
-            </div>
-            <div>
-              <SheetTitle className="font-serif-display text-xl text-foreground">
-                Giỏ Hàng Của Bạn
-              </SheetTitle>
-              <SheetDescription className="text-xs text-muted-foreground">
-                {totalItems > 0
-                  ? `Đang có ${totalItems} món ăn thượng hạng trong thực đơn`
-                  : "Chưa có món ăn nào được chọn"}
-              </SheetDescription>
-            </div>
-          </div>
+        <SheetHeader className="border-b border-primary/20 bg-[#13110e] px-6 py-6">
+          <p className="text-[9px] uppercase tracking-[0.32em] text-primary">
+            Votre Sélection
+          </p>
+          <SheetTitle className="font-serif-display text-2xl font-normal text-foreground">
+            Thực Đơn Đã Chọn
+          </SheetTitle>
+          <SheetDescription className="sr-only">
+            Danh sách các món ăn trong giỏ hàng
+          </SheetDescription>
         </SheetHeader>
 
         {items.length === 0 ? (
-          <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 text-center">
-            <div className="flex size-20 items-center justify-center rounded-full border border-primary/20 bg-secondary/60 text-primary/70">
-              <UtensilsCrossed className="size-9" />
-            </div>
-            <div className="space-y-1.5">
-              <h3 className="font-serif-display text-lg font-semibold text-foreground">
-                Giỏ hàng đang trống
-              </h3>
-              <p className="max-w-xs text-sm text-muted-foreground">
-                Hãy khám phá các nhà hàng Fine Dining và thêm những món ăn đặc
-                trưng vào bàn tiệc của bạn.
-              </p>
-            </div>
+          <div className="flex flex-1 flex-col items-center justify-center gap-5 px-8 text-center">
+            <p className="font-serif-display text-xl italic text-muted-foreground">
+              “Bàn tiệc của quý khách hiện đang trống.”
+            </p>
             <Button
-              variant="default"
+              variant="outline"
               onClick={() => setDrawerOpen(false)}
-              className="mt-2"
             >
-              Khám phá thực đơn ngay
+              Khám Phá Thực Đơn
             </Button>
           </div>
         ) : (
           <>
-            <div className="flex items-center justify-between bg-secondary/40 px-6 py-2.5 text-xs text-muted-foreground">
-              <span className="flex items-center gap-1.5 text-primary">
-                <Sparkles className="size-3.5" />
-                Đóng gói giữ nhiệt chuẩn Fine Dining
-              </span>
+            <div className="flex items-center justify-between border-b border-primary/15 px-6 py-2.5 text-[10px] uppercase tracking-[0.22em] text-muted-foreground">
+              <span>{totalItems} món</span>
               <button
                 type="button"
                 onClick={clearCart}
-                className="font-medium text-muted-foreground transition-colors hover:text-destructive cursor-pointer"
+                className="transition-colors hover:text-primary cursor-pointer"
               >
-                Xóa tất cả
+                Làm mới
               </button>
             </div>
 
-            <div className="flex-1 space-y-3 overflow-y-auto px-6 py-4">
+            <div className="flex-1 divide-y divide-primary/15 overflow-y-auto px-6">
               {items.map((item) => (
-                <div
-                  key={item.id}
-                  className="flex gap-3.5 rounded-2xl border border-border/80 bg-[#1c1814] p-3 transition-colors hover:border-primary/30"
-                >
-                  <div className="relative size-20 shrink-0 overflow-hidden rounded-xl border border-border/60">
+                <div key={item.id} className="flex gap-4 py-4">
+                  <div className="relative size-16 shrink-0 overflow-hidden border border-primary/25">
                     <Image
                       src={item.imageUrl}
                       alt={item.name}
                       fill
-                      sizes="80px"
+                      sizes="64px"
                       className="object-cover"
                     />
                   </div>
@@ -120,11 +90,11 @@ export function CartDrawer() {
                   <div className="flex flex-1 flex-col justify-between">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <h4 className="line-clamp-1 font-serif-display text-sm font-semibold text-foreground">
+                        <h4 className="font-serif-display text-base font-medium text-foreground line-clamp-1">
                           {item.name}
                         </h4>
                         {item.restaurantName && (
-                          <p className="text-[11px] text-muted-foreground">
+                          <p className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground">
                             {item.restaurantName}
                           </p>
                         )}
@@ -133,34 +103,34 @@ export function CartDrawer() {
                         type="button"
                         onClick={() => removeItem(item.id)}
                         aria-label={`Xóa ${item.name}`}
-                        className="rounded-lg p-1 text-muted-foreground transition-colors hover:bg-destructive/15 hover:text-destructive cursor-pointer"
+                        className="text-muted-foreground transition-colors hover:text-destructive cursor-pointer"
                       >
                         <Trash2 className="size-3.5" />
                       </button>
                     </div>
 
                     <div className="mt-2 flex items-center justify-between">
-                      <span className="text-sm font-bold text-primary">
+                      <span className="font-serif-display text-sm font-medium text-primary">
                         {formatCurrency(item.price * item.quantity)}
                       </span>
 
-                      <div className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-secondary/80 p-0.5">
+                      <div className="inline-flex items-center border border-primary/35">
                         <button
                           type="button"
                           onClick={() => decreaseQuantity(item.id)}
                           aria-label={`Giảm ${item.name}`}
-                          className="flex size-6 items-center justify-center rounded-md text-foreground transition-colors hover:bg-primary/20 hover:text-primary cursor-pointer"
+                          className="flex size-6 items-center justify-center text-muted-foreground hover:text-primary cursor-pointer"
                         >
                           <Minus className="size-3" />
                         </button>
-                        <span className="min-w-[1.25rem] text-center text-xs font-bold text-foreground">
+                        <span className="min-w-[1.25rem] text-center font-serif-display text-xs text-foreground">
                           {item.quantity}
                         </span>
                         <button
                           type="button"
                           onClick={() => increaseQuantity(item.id)}
                           aria-label={`Tăng ${item.name}`}
-                          className="flex size-6 items-center justify-center rounded-md bg-primary text-primary-foreground transition-colors hover:bg-amber-400 cursor-pointer"
+                          className="flex size-6 items-center justify-center text-primary hover:bg-primary hover:text-primary-foreground cursor-pointer"
                         >
                           <Plus className="size-3" />
                         </button>
@@ -171,40 +141,28 @@ export function CartDrawer() {
               ))}
             </div>
 
-            <SheetFooter className="border-t border-border bg-[#1c1814] p-6">
-              <div className="w-full space-y-2.5 text-sm">
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Tạm tính ({totalItems} món)</span>
-                  <span className="font-medium text-foreground">
+            <SheetFooter className="border-t border-primary/20 bg-[#13110e] p-6">
+              <div className="w-full space-y-3">
+                <div className="flex items-baseline justify-between">
+                  <span className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground">
+                    Tạm tính
+                  </span>
+                  <span className="font-serif-display text-2xl text-primary">
                     {formatCurrency(totalPrice)}
                   </span>
                 </div>
-                <div className="flex justify-between text-xs text-muted-foreground">
-                  <span>Phí & thời gian giao hàng</span>
-                  <span className="italic text-muted-foreground">
-                    Tính sau khi nhập địa chỉ
-                  </span>
-                </div>
-                <Separator className="my-2" />
-                <div className="flex items-center justify-between text-base font-bold">
-                  <span className="font-serif-display text-foreground">
-                    Tạm tính đơn hàng
-                  </span>
-                  <span className="text-lg text-primary">
-                    {formatCurrency(totalPrice)}
-                  </span>
-                </div>
+                <Separator className="bg-primary/15" />
               </div>
 
               <Button
                 asChild
                 size="lg"
                 onClick={() => setDrawerOpen(false)}
-                className="mt-3 w-full justify-between px-6 text-base font-bold"
+                className="w-full justify-between"
               >
                 <Link href="/checkout">
-                  <span>Tiến hành đặt hàng</span>
-                  <ArrowRight className="size-5" />
+                  <span>Tiến Hành Đặt Hàng</span>
+                  <ArrowRight className="size-4" />
                 </Link>
               </Button>
             </SheetFooter>

@@ -2,26 +2,26 @@
 @import "tw-animate-css";
 
 :root {
-  --background: #12100e;
-  --foreground: #faf7f2;
-  --card: #1c1814;
-  --card-foreground: #faf7f2;
-  --popover: #1c1814;
-  --popover-foreground: #faf7f2;
-  --primary: #eab308;
-  --primary-foreground: #12100e;
-  --secondary: #27221c;
-  --secondary-foreground: #f3ede2;
-  --muted: #241f1a;
-  --muted-foreground: #a89f91;
-  --accent: #eab308;
-  --accent-foreground: #12100e;
-  --destructive: #ef4444;
-  --destructive-foreground: #faf7f2;
-  --border: #332c24;
-  --input: #2b251e;
-  --ring: #eab308;
-  --radius: 0.875rem;
+  --background: #0c0b09;
+  --foreground: #f4f0ea;
+  --card: #13110e;
+  --card-foreground: #f4f0ea;
+  --popover: #13110e;
+  --popover-foreground: #f4f0ea;
+  --primary: #c5a059;
+  --primary-foreground: #0c0b09;
+  --secondary: #1b1814;
+  --secondary-foreground: #e6dfd3;
+  --muted: #181512;
+  --muted-foreground: #968b7b;
+  --accent: #c5a059;
+  --accent-foreground: #0c0b09;
+  --destructive: #b94a48;
+  --destructive-foreground: #f4f0ea;
+  --border: #2a241c;
+  --input: #221d17;
+  --ring: #c5a059;
+  --radius: 0.125rem;
 }
 
 @theme inline {
@@ -44,7 +44,7 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --font-serif: var(--font-playfair), Georgia, Cambria, "Times New Roman", Times, serif;
+  --font-serif: var(--font-cormorant), var(--font-playfair), Georgia, serif;
   --font-sans: var(--font-jakarta), system-ui, -apple-system, sans-serif;
 }
 
@@ -65,15 +65,16 @@ body {
   font-family: var(--font-serif);
 }
 
-/* Custom subtle gold glow utility */
+/* Subtle antique brass hairline frame */
 .gold-glow {
-  box-shadow: 0 10px 35px -10px rgba(234, 179, 8, 0.25);
+  box-shadow: 0 12px 40px -15px rgba(197, 160, 89, 0.18);
 }
 
-.gold-border-gradient {
-  background: linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(51, 44, 36, 0.4));
+.french-double-border {
+  border: 1px solid rgba(197, 160, 89, 0.28);
+  outline: 1px solid rgba(197, 160, 89, 0.1);
+  outline-offset: -5px;
 }
-
 
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {

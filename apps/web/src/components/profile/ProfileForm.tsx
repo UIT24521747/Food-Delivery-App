@@ -3,16 +3,7 @@
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import {
-  User,
-  Mail,
-  Phone,
-  MapPin,
-  Utensils,
-  FileText,
-  Save,
-  Loader2,
-} from "lucide-react";
+import { Loader2 } from "lucide-react";
 import {
   userProfileSchema,
   type UserProfileFormValues,
@@ -35,40 +26,41 @@ export function ProfileForm() {
       email: "alex@storiafood.vn",
       phone: "0901234567",
       address: "88 Đồng Khởi, Phường Bến Nghé, Quận 1, TP. Hồ Chí Minh",
-      favoriteCuisine: "Ẩm thực Ý Đương Đại & Omakase",
-      bio: "Thực khách yêu thích nấm Truffle đen vùng Umbria và rượu vang vùng Tuscany.",
+      favoriteCuisine: "Haute Gastronomie Française",
+      bio: "Thực khách thành viên.",
     },
     mode: "onTouched",
   });
 
   const onSubmit = async (values: UserProfileFormValues) => {
     await new Promise((resolve) => setTimeout(resolve, 600));
-    toast.success(`Đã lưu hồ sơ của ${values.fullName} thành công!`);
+    toast.success(`Đã cập nhật hồ sơ của ${values.fullName}`);
   };
 
   return (
-    <Card className="mx-auto max-w-2xl border-border/80 bg-[#1c1814]">
-      <CardHeader className="border-b border-border/70 pb-5">
-        <CardTitle className="text-xl text-foreground">
-          Thông Tin Hồ Sơ Thực Khách VIP (User Profile Schema)
-        </CardTitle>
-        <p className="text-xs text-muted-foreground">
-          Biểu mẫu sử dụng <code className="text-primary">userProfileSchema</code>{" "}
-          (Zod + React Hook Form) theo yêu cầu Buổi 3.
+    <Card className="mx-auto max-w-2xl border-primary/20 bg-[#13110e] p-2 sm:p-6">
+      <CardHeader className="border-b border-primary/15 pb-4">
+        <p className="text-[9px] uppercase tracking-[0.32em] text-primary">
+          Membre Privé
         </p>
+        <CardTitle className="font-serif-display text-2xl font-normal">
+          Hồ Sơ Thành Viên
+        </CardTitle>
       </CardHeader>
 
       <CardContent className="pt-6">
         <form
           onSubmit={handleSubmit(onSubmit)}
           noValidate
-          className="space-y-5"
+          className="space-y-6"
         >
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="profile-fullName" className="flex items-center gap-1.5">
-                <User className="size-3.5 text-primary" />
-                <span>Họ và tên *</span>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label
+                htmlFor="profile-fullName"
+                className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground"
+              >
+                Họ và tên
               </Label>
               <Input
                 id="profile-fullName"
@@ -76,16 +68,18 @@ export function ProfileForm() {
                 aria-invalid={!!errors.fullName}
               />
               {errors.fullName?.message && (
-                <p className="text-xs font-medium text-destructive">
+                <p className="pt-1 text-xs text-destructive">
                   {errors.fullName.message}
                 </p>
               )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="profile-email" className="flex items-center gap-1.5">
-                <Mail className="size-3.5 text-primary" />
-                <span>Email *</span>
+            <div className="space-y-1.5">
+              <Label
+                htmlFor="profile-email"
+                className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground"
+              >
+                Email
               </Label>
               <Input
                 id="profile-email"
@@ -94,18 +88,20 @@ export function ProfileForm() {
                 aria-invalid={!!errors.email}
               />
               {errors.email?.message && (
-                <p className="text-xs font-medium text-destructive">
+                <p className="pt-1 text-xs text-destructive">
                   {errors.email.message}
                 </p>
               )}
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            <div className="space-y-2">
-              <Label htmlFor="profile-phone" className="flex items-center gap-1.5">
-                <Phone className="size-3.5 text-primary" />
-                <span>Số điện thoại Việt Nam *</span>
+          <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label
+                htmlFor="profile-phone"
+                className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground"
+              >
+                Số điện thoại
               </Label>
               <Input
                 id="profile-phone"
@@ -114,16 +110,18 @@ export function ProfileForm() {
                 aria-invalid={!!errors.phone}
               />
               {errors.phone?.message && (
-                <p className="text-xs font-medium text-destructive">
+                <p className="pt-1 text-xs text-destructive">
                   {errors.phone.message}
                 </p>
               )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="profile-cuisine" className="flex items-center gap-1.5">
-                <Utensils className="size-3.5 text-primary" />
-                <span>Ẩm thực yêu thích *</span>
+            <div className="space-y-1.5">
+              <Label
+                htmlFor="profile-cuisine"
+                className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground"
+              >
+                Phong cách ẩm thực
               </Label>
               <Input
                 id="profile-cuisine"
@@ -131,17 +129,19 @@ export function ProfileForm() {
                 aria-invalid={!!errors.favoriteCuisine}
               />
               {errors.favoriteCuisine?.message && (
-                <p className="text-xs font-medium text-destructive">
+                <p className="pt-1 text-xs text-destructive">
                   {errors.favoriteCuisine.message}
                 </p>
               )}
             </div>
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="profile-address" className="flex items-center gap-1.5">
-              <MapPin className="size-3.5 text-primary" />
-              <span>Địa chỉ giao hàng mặc định *</span>
+          <div className="space-y-1.5">
+            <Label
+              htmlFor="profile-address"
+              className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground"
+            >
+              Địa chỉ
             </Label>
             <Input
               id="profile-address"
@@ -149,16 +149,18 @@ export function ProfileForm() {
               aria-invalid={!!errors.address}
             />
             {errors.address?.message && (
-              <p className="text-xs font-medium text-destructive">
+              <p className="pt-1 text-xs text-destructive">
                 {errors.address.message}
               </p>
             )}
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="profile-bio" className="flex items-center gap-1.5">
-              <FileText className="size-3.5 text-primary" />
-              <span>Giới thiệu & Khẩu vị cá nhân</span>
+          <div className="space-y-1.5">
+            <Label
+              htmlFor="profile-bio"
+              className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground"
+            >
+              Ghi chú khẩu vị
             </Label>
             <Textarea
               id="profile-bio"
@@ -166,30 +168,29 @@ export function ProfileForm() {
               aria-invalid={!!errors.bio}
             />
             {errors.bio?.message && (
-              <p className="text-xs font-medium text-destructive">
+              <p className="pt-1 text-xs text-destructive">
                 {errors.bio.message}
               </p>
             )}
           </div>
 
-          <Button
-            type="submit"
-            size="lg"
-            disabled={isSubmitting}
-            className="w-full"
-          >
-            {isSubmitting ? (
-              <>
-                <Loader2 className="size-4 animate-spin" />
-                <span>Đang lưu hồ sơ...</span>
-              </>
-            ) : (
-              <>
-                <Save className="size-4" />
-                <span>Lưu cập nhật hồ sơ</span>
-              </>
-            )}
-          </Button>
+          <div className="pt-2">
+            <Button
+              type="submit"
+              size="lg"
+              disabled={isSubmitting}
+              className="w-full"
+            >
+              {isSubmitting ? (
+                <>
+                  <Loader2 className="size-4 animate-spin" />
+                  <span>Đang lưu...</span>
+                </>
+              ) : (
+                <span>Lưu Hồ Sơ</span>
+              )}
+            </Button>
+          </div>
         </form>
       </CardContent>
     </Card>
