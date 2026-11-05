@@ -39,9 +39,6 @@ export function CartDrawer() {
   const totalItems = useCartStore(selectTotalItems);
   const totalPrice = useCartStore(selectTotalPrice);
 
-  const deliveryFee = items.length > 0 ? 25000 : 0;
-  const finalTotal = totalPrice + deliveryFee;
-
   return (
     <Sheet open={isDrawerOpen} onOpenChange={setDrawerOpen}>
       <SheetContent
@@ -123,7 +120,7 @@ export function CartDrawer() {
                   <div className="flex flex-1 flex-col justify-between">
                     <div className="flex items-start justify-between gap-2">
                       <div>
-                        <h4 className="font-serif-display text-sm font-semibold text-foreground line-clamp-1">
+                        <h4 className="line-clamp-1 font-serif-display text-sm font-semibold text-foreground">
                           {item.name}
                         </h4>
                         {item.restaurantName && (
@@ -182,19 +179,19 @@ export function CartDrawer() {
                     {formatCurrency(totalPrice)}
                   </span>
                 </div>
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Phí giao hàng tiêu chuẩn</span>
-                  <span className="font-medium text-foreground">
-                    {formatCurrency(deliveryFee)}
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>Phí & thời gian giao hàng</span>
+                  <span className="italic text-muted-foreground">
+                    Tính sau khi nhập địa chỉ
                   </span>
                 </div>
                 <Separator className="my-2" />
                 <div className="flex items-center justify-between text-base font-bold">
                   <span className="font-serif-display text-foreground">
-                    Tổng cộng
+                    Tạm tính đơn hàng
                   </span>
                   <span className="text-lg text-primary">
-                    {formatCurrency(finalTotal)}
+                    {formatCurrency(totalPrice)}
                   </span>
                 </div>
               </div>

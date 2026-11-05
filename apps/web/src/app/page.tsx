@@ -90,7 +90,7 @@ export default function HomePage() {
                 </div>
                 <div className="flex items-center gap-1.5">
                   <Clock className="size-3.5 shrink-0 text-primary sm:size-4" />
-                  <span>Giao nhanh 25p</span>
+                  <span>Chế biến tươi mới</span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <ShieldCheck className="size-3.5 shrink-0 text-primary sm:size-4" />

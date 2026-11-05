@@ -8,14 +8,13 @@ import {
   MapPin,
   Sparkles,
   Utensils,
-  Truck,
+  Info,
   CheckCircle2,
 } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { DishCard } from "@/components/restaurant/DishCard";
 import { getRestaurantById, RESTAURANTS } from "@/data/restaurants";
-import { formatCurrency } from "@/lib/utils";
 
 interface RestaurantPageProps {
   params: Promise<{ id: string }>;
@@ -75,7 +74,10 @@ export default async function RestaurantDetailPage({
           <div className="absolute inset-0 bg-gradient-to-t from-[#12100e] via-[#12100e]/65 to-transparent" />
 
           <div className="absolute top-3 left-3 flex flex-wrap items-center gap-1.5 sm:top-5 sm:left-6 sm:gap-2">
-            <Badge variant="default" className="gap-1 px-2.5 py-0.5 text-[10px] sm:px-3 sm:py-1 sm:text-xs">
+            <Badge
+              variant="default"
+              className="gap-1 px-2.5 py-0.5 text-[10px] sm:px-3 sm:py-1 sm:text-xs"
+            >
               <Sparkles className="size-3" />
               <span>{restaurant.badge}</span>
             </Badge>
@@ -111,30 +113,29 @@ export default async function RestaurantDetailPage({
                   ({restaurant.reviewCount})
                 </span>
               </div>
-              <Button asChild size="sm" className="h-8 rounded-xl px-3 text-xs sm:h-11 sm:px-6 sm:text-sm">
+              <Button
+                asChild
+                size="sm"
+                className="h-8 rounded-xl px-3 text-xs sm:h-11 sm:px-6 sm:text-sm"
+              >
                 <Link href="/checkout">Thanh toán ngay</Link>
               </Button>
             </div>
           </div>
 
-          {/* Metadata Bar */}
-          <div className="mt-3 grid grid-cols-2 gap-2 border-t border-border/70 pt-3 text-[11px] text-muted-foreground sm:mt-6 sm:grid-cols-3 sm:gap-3 sm:pt-5 sm:text-xs">
-            <div className="col-span-2 flex items-center gap-1.5 truncate sm:col-span-1 sm:gap-2.5">
+          {/* Metadata Bar: Only restaurant location, opening hours, and note that delivery is calculated at checkout */}
+          <div className="mt-3 grid grid-cols-1 gap-2 border-t border-border/70 pt-3 text-[11px] text-muted-foreground sm:mt-6 sm:grid-cols-3 sm:gap-3 sm:pt-5 sm:text-xs">
+            <div className="flex items-center gap-1.5 truncate sm:gap-2.5">
               <MapPin className="size-3.5 shrink-0 text-primary sm:size-4" />
               <span className="truncate">{restaurant.address}</span>
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2.5">
               <Clock className="size-3.5 shrink-0 text-primary sm:size-4" />
-              <span>Giao: {restaurant.deliveryTime}</span>
+              <span>Giờ phục vụ: {restaurant.openingHours}</span>
             </div>
             <div className="flex items-center gap-1.5 sm:gap-2.5">
-              <Truck className="size-3.5 shrink-0 text-primary sm:size-4" />
-              <span>
-                Phí:{" "}
-                <strong className="text-foreground">
-                  {formatCurrency(restaurant.deliveryFee)}
-                </strong>
-              </span>
+              <Info className="size-3.5 shrink-0 text-primary sm:size-4" />
+              <span>Phí & thời gian giao tính khi nhập địa chỉ</span>
             </div>
           </div>
         </div>
@@ -158,7 +159,10 @@ export default async function RestaurantDetailPage({
           </div>
 
           <div className="flex items-center gap-1.5 overflow-x-auto whitespace-nowrap pb-1 no-scrollbar sm:flex-wrap sm:pb-0">
-            <Badge variant="default" className="shrink-0 px-2.5 py-0.5 text-[11px] sm:px-3 sm:py-1 sm:text-xs">
+            <Badge
+              variant="default"
+              className="shrink-0 px-2.5 py-0.5 text-[11px] sm:px-3 sm:py-1 sm:text-xs"
+            >
               Tất cả ({restaurant.menu.length})
             </Badge>
             {categories.map((cat) => (

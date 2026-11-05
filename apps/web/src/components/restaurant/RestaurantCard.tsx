@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { formatCurrency } from "@/lib/utils";
 import type { Restaurant } from "@/data/restaurants";
 
 interface RestaurantCardProps {
@@ -40,7 +39,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
             className="gap-1 px-1.5 py-0.5 text-[9px] shadow-md sm:px-2.5 sm:text-xs"
           >
             <Sparkles className="size-2.5 sm:size-3" />
-            <span className="truncate max-w-[90px] sm:max-w-none">
+            <span className="max-w-[90px] truncate sm:max-w-none">
               {restaurant.badge}
             </span>
           </Badge>
@@ -77,13 +76,7 @@ export function RestaurantCard({ restaurant }: RestaurantCardProps) {
         <div className="flex items-center justify-between border-t border-border/60 pt-2 sm:pt-3">
           <span className="flex items-center gap-1">
             <Clock className="size-3 text-primary sm:size-3.5" />
-            {restaurant.deliveryTime}
-          </span>
-          <span className="hidden sm:inline">
-            Phí giao:{" "}
-            <strong className="text-foreground">
-              {formatCurrency(restaurant.deliveryFee)}
-            </strong>
+            <span>Mở cửa: {restaurant.openingHours}</span>
           </span>
         </div>
         <div className="hidden items-center gap-1.5 truncate sm:flex">

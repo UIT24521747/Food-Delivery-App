@@ -20,6 +20,8 @@ import {
   Plus,
   Minus,
   Trash2,
+  Clock,
+  Truck,
 } from "lucide-react";
 import {
   checkoutSchema,
@@ -43,9 +45,50 @@ interface OrderSuccessData {
   orderCode: string;
   createdAt: string;
   estimatedDelivery: string;
+  deliveryFee: number;
   customer: CheckoutFormValues;
   orderedItems: CartItem[];
   totalAmount: number;
+}
+
+function calculateDeliveryByAddress(address: string): {
+  hasValidAddress: boolean;
+  deliveryFee: number;
+  estimatedTime: string;
+} {
+  const trimmed = address.trim();
+  if (trimmed.length < 10) {
+    return {
+      hasValidAddress: false,
+      deliveryFee: 0,
+      estimatedTime: "",
+    };
+  }
+
+  const normalized = trimmed.toLowerCase();
+  const isCentralDistrict =
+    normalized.includes("quận 1") ||
+    normalized.includes("quan 1") ||
+    normalized.includes("q1") ||
+    normalized.includes("quận 3") ||
+    normalized.includes("quan 3") ||
+    normalized.includes("q3") ||
+    normalized.includes("đồng khởi") ||
+    normalized.includes("bến nghé");
+
+  if (isCentralDistrict) {
+    return {
+      hasValidAddress: true,
+      deliveryFee: 20000,
+      estimatedTime: "20 - 30 phút",
+    };
+  }
+
+  return {
+    hasValidAddress: true,
+    deliveryFee: 30000,
+    estimatedTime: "30 - 45 phút",
+  };
 }
 
 export function CheckoutForm() {
@@ -60,12 +103,10 @@ export function CheckoutForm() {
   const [confirmedOrder, setConfirmedOrder] =
     useState<OrderSuccessData | null>(null);
 
-  const deliveryFee = items.length > 0 ? 25000 : 0;
-  const finalTotal = totalPrice + deliveryFee;
-
   const {
     register,
     handleSubmit,
+    watch,
     formState: { errors, isSubmitting },
     reset,
   } = useForm<CheckoutFormValues>({
@@ -79,6 +120,13 @@ export function CheckoutForm() {
     mode: "onTouched",
   });
 
+  const watchedAddress = watch("address") || "";
+  const { hasValidAddress, deliveryFee, estimatedTime } =
+    calculateDeliveryByAddress(watchedAddress);
+
+  const finalTotal =
+    items.length > 0 ? totalPrice + (hasValidAddress ? deliveryFee : 0) : 0;
+
   const onSubmit = async (values: CheckoutFormValues) => {
     if (items.length === 0) {
       toast.error(
@@ -87,8 +135,9 @@ export function CheckoutForm() {
       return;
     }
 
+    const deliveryInfo = calculateDeliveryByAddress(values.address);
     const snapshotItems = [...items];
-    const snapshotTotal = finalTotal;
+    const snapshotTotal = totalPrice + deliveryInfo.deliveryFee;
 
     try {
       const response = await fetch("/api/orders", {
@@ -99,6 +148,8 @@ export function CheckoutForm() {
         body: JSON.stringify({
           ...values,
           items: snapshotItems,
+          deliveryFee: deliveryInfo.deliveryFee,
+          estimatedDelivery: deliveryInfo.estimatedTime,
           totalAmount: snapshotTotal,
         }),
       });
@@ -114,7 +165,9 @@ export function CheckoutForm() {
       setConfirmedOrder({
         orderCode: result.orderCode,
         createdAt: result.createdAt,
-        estimatedDelivery: result.estimatedDelivery,
+        estimatedDelivery:
+          deliveryInfo.estimatedTime || result.estimatedDelivery,
+        deliveryFee: deliveryInfo.deliveryFee,
         customer: values,
         orderedItems: snapshotItems,
         totalAmount: snapshotTotal,
@@ -165,7 +218,8 @@ export function CheckoutForm() {
               {confirmedOrder.orderCode}
             </p>
             <p className="mt-1 text-xs text-emerald-400">
-              Dự kiến giao trong {confirmedOrder.estimatedDelivery}
+              Dự kiến giao tới địa chỉ của bạn trong{" "}
+              {confirmedOrder.estimatedDelivery}
             </p>
           </div>
         </div>
@@ -231,6 +285,10 @@ export function CheckoutForm() {
                 </span>
               </div>
             ))}
+            <div className="flex items-center justify-between pt-1 text-xs text-muted-foreground">
+              <span>Phí giao hàng theo địa chỉ</span>
+              <span>{formatCurrency(confirmedOrder.deliveryFee)}</span>
+            </div>
             <Separator className="my-2" />
             <div className="flex items-center justify-between text-base font-bold">
               <span>Tổng thanh toán</span>
@@ -268,8 +326,8 @@ export function CheckoutForm() {
                   Thông Tin Giao Hàng Fine Dining
                 </CardTitle>
                 <p className="text-xs text-muted-foreground">
-                  Vui lòng điền đầy đủ thông tin để đội ngũ Storià phục vụ chu
-                  đáo nhất
+                  Nhập địa chỉ giao hàng để hệ thống tự động tính phí và thời
+                  gian giao dự kiến
                 </p>
               </div>
             </div>
@@ -358,6 +416,20 @@ export function CheckoutForm() {
                   >
                     {errors.address.message}
                   </p>
+                )}
+
+                {hasValidAddress && !errors.address && (
+                  <div className="flex flex-wrap items-center gap-3 rounded-xl border border-emerald-500/30 bg-emerald-500/10 px-3 py-2 text-xs text-emerald-400">
+                    <span className="flex items-center gap-1 font-medium">
+                      <Truck className="size-3.5" />
+                      Phí giao: {formatCurrency(deliveryFee)}
+                    </span>
+                    <span>•</span>
+                    <span className="flex items-center gap-1 font-medium">
+                      <Clock className="size-3.5" />
+                      Dự kiến: {estimatedTime}
+                    </span>
+                  </div>
                 )}
               </div>
 
@@ -513,14 +585,34 @@ export function CheckoutForm() {
                     </span>
                   </div>
                   <div className="flex justify-between text-muted-foreground">
-                    <span>Phí giao hàng tiêu chuẩn</span>
-                    <span className="text-foreground">
-                      {formatCurrency(deliveryFee)}
-                    </span>
+                    <span>Phí giao hàng</span>
+                    {hasValidAddress ? (
+                      <span className="font-medium text-foreground">
+                        {formatCurrency(deliveryFee)}
+                      </span>
+                    ) : (
+                      <span className="text-xs italic text-muted-foreground">
+                        Nhập địa chỉ để tính phí
+                      </span>
+                    )}
+                  </div>
+                  <div className="flex justify-between text-muted-foreground">
+                    <span>Thời gian giao dự kiến</span>
+                    {hasValidAddress ? (
+                      <span className="font-medium text-emerald-400">
+                        {estimatedTime}
+                      </span>
+                    ) : (
+                      <span className="text-xs italic text-muted-foreground">
+                        Nhập địa chỉ để ước tính
+                      </span>
+                    )}
                   </div>
                   <Separator className="my-2" />
                   <div className="flex items-center justify-between text-base font-bold">
-                    <span className="font-serif-display">Tổng thanh toán</span>
+                    <span className="font-serif-display">
+                      {hasValidAddress ? "Tổng thanh toán" : "Tạm tính"}
+                    </span>
                     <span className="text-xl text-primary">
                       {formatCurrency(finalTotal)}
                     </span>
