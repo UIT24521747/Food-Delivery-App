@@ -3,25 +3,25 @@
 
 :root {
   --background: #0c0b09;
-  --foreground: #f4f0ea;
-  --card: #13110e;
-  --card-foreground: #f4f0ea;
-  --popover: #13110e;
-  --popover-foreground: #f4f0ea;
-  --primary: #c5a059;
+  --foreground: #f8f5ef;
+  --card: #14120e;
+  --card-foreground: #f8f5ef;
+  --popover: #14120e;
+  --popover-foreground: #f8f5ef;
+  --primary: #f5b82e;
   --primary-foreground: #0c0b09;
-  --secondary: #1b1814;
-  --secondary-foreground: #e6dfd3;
-  --muted: #181512;
-  --muted-foreground: #968b7b;
-  --accent: #c5a059;
+  --secondary: #1e1a14;
+  --secondary-foreground: #efe8dc;
+  --muted: #191611;
+  --muted-foreground: #a39784;
+  --accent: #f5b82e;
   --accent-foreground: #0c0b09;
-  --destructive: #b94a48;
-  --destructive-foreground: #f4f0ea;
-  --border: #2a241c;
-  --input: #221d17;
-  --ring: #c5a059;
-  --radius: 0.125rem;
+  --destructive: #d94e4e;
+  --destructive-foreground: #f8f5ef;
+  --border: #362d20;
+  --input: #262017;
+  --ring: #f5b82e;
+  --radius: 0.5rem;
 }
 
 @theme inline {
@@ -65,14 +65,14 @@ body {
   font-family: var(--font-serif);
 }
 
-/* Subtle antique brass hairline frame */
+/* Luminous royal gold glow */
 .gold-glow {
-  box-shadow: 0 12px 40px -15px rgba(197, 160, 89, 0.18);
+  box-shadow: 0 8px 30px -8px rgba(245, 184, 46, 0.35);
 }
 
 .french-double-border {
-  border: 1px solid rgba(197, 160, 89, 0.28);
-  outline: 1px solid rgba(197, 160, 89, 0.1);
+  border: 1px solid rgba(245, 184, 46, 0.45);
+  outline: 1px solid rgba(245, 184, 46, 0.16);
   outline-offset: -5px;
 }
 
