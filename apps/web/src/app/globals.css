@@ -73,3 +73,15 @@ body {
 .gold-border-gradient {
   background: linear-gradient(135deg, rgba(234, 179, 8, 0.25), rgba(51, 44, 36, 0.4));
 }
+
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
